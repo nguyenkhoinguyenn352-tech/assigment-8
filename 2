@@ -1,0 +1,30 @@
+import mysql.connector
+
+connection = mysql.connector.connect
+    host="localhost",
+    user="root",
+    password="",
+    database="flight_game"
+
+
+cursor = connection.cursor()
+
+code = input("Enter area code (e.g. FI): ").upper()
+
+sql = """
+SELECT type, COUNT(*) 
+FROM airport
+WHERE iso_country = %s
+GROUP BY type
+ORDER BY type;
+"""
+
+cursor.execute(sql, (code,))
+results = cursor.fetchall()
+
+if results:
+    print("Airports in", code)
+    for row in results:
+        print(row[1], row[0])
+else:
+    print("No airports found for that area code.")
