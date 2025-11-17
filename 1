@@ -1,0 +1,23 @@
+import mysql.connector
+
+connection = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="",
+    database="flight_game"
+)
+
+cursor = connection.cursor()
+
+icao = input("Enter ICAO code: ")
+
+cursor.execute("SELECT name, municipality FROM airport WHERE ident = %s", (icao,))
+row = cursor.fetchone()
+
+if row:
+    print("Airport name:", row[0])
+    print("Town:", row[1])
+else:
+    print("Airport not found.")
+
+
