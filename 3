@@ -1,0 +1,32 @@
+import mysql.connector
+from geopy.distance import geodesic
+
+# Connect to database
+connection = mysql.connector.connect
+    host="localhost",
+    user="root",
+    password="",
+    database="flight_game"
+
+cursor = connection.cursor()
+
+# Ask user for ICAO codes
+icao1 = input("Enter first ICAO code: ").upper()
+icao2 = input("Enter second ICAO code: ").upper()
+
+cursor.execute(sql, (icao1,))
+loc1 = cursor.fetchone()
+
+cursor.execute(sql, (icao2,))
+loc2 = cursor.fetchone()
+
+# Check if both airports exist
+if loc1 and loc2:
+    coords1 = (loc1[0], loc1[1])
+    coords2 = (loc2[0], loc2[1])
+
+    # Calculate distance
+    distance = geodesic(coords1, coords2).kilometers
+    print(f"Distance between {icao1} and {icao2}: {distance:.2f} km")
+else:
+    print("One or both ICAO codes were not found in the database.")
